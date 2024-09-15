@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample HTML Page with JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #75787b;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .address-list {
+            max-height: 500px; /* Adjust height as needed */
+            overflow-y: auto;  /* Enables vertical scrolling */
+            border: 1px solid #ccc;
+            background: #fff;
+            padding: 10px;
+            margin-top: 0px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .address-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .address-item:last-child {
+            border-bottom: none;
+        }
+        iframe {
+            border: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 8px;
+            margin: 0;
+        }
+        .columnBlockLayout {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 250px;
+            word-break: break-word;
+        }
+        .text-left {
+            text-align: left;
+        }
+    </style>
+    <!-- Add jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Find Your New Home</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row sectionBlockLayout text-left">
+            <div class="col-md-4 columnBlockLayout">
+                <div id="addressList" class="address-list">
+                    <!-- Address items will be added here -->
+                </div>
+            </div>
+            <div class="col-md-8 columnBlockLayout">
+                <iframe frameborder="0" id="mapIframe" src="https://www.google.com/maps/embed/v1/place?q=Burruss_Hall&amp;key=AIzaSyB0lWqbCev1lN_waArnE6S8w5y1N1ichYM" style="height: 450px;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Example list of addresses
+            const addresses = [
+          "321 Edge Way, Blacksburg, VA 24060",
+          "1000 Progress St NW, Blacksburg, VA 24060",
+          "1206 University Terrace, Blacksburg, VA 24060",
+          "870 Newport Ter, Blacksburg, VA 24060",
+          "1907 Shadow Lake Rd, Blacksburg, VA 24060",
+          "2714 Newton Ct, Blacksburg, VA 24060",
+          "300 McDonald St, Blacksburg, VA 24060",
+          "203 Tee St, Blacksburg, VA 24060",
+          "112 Hearthstone Dr, Blacksburg, VA 24060",
+          "115 Hearthstone Dr, Blacksburg, VA 24060"
+      ];
+
+            // Function to generate and display the list of addresses
+            function displayAddresses() {
+                const $addressList = $('#addressList');
+                $addressList.empty(); // Clear any existing content
+                
+                addresses.forEach(function(address) {
+                    // Create an encoded URL for the Google Maps search
+                    const encodedAddress = encodeURIComponent(address);
+                    const link = `https://www.google.com/maps/search/?q=${encodedAddress}`;
+
+                    // Append address items as clickable links
+                    $addressList.append('<div class="address-item"><a href="#" data-address="' + encodedAddress + '">' + address + '</a></div>');
+                });
+            }
+
+            // Call the function to display addresses when the page loads
+            displayAddresses();
+
+            // Event handler for address clicks
+            $('#addressList').on('click', 'a', function(e) {
+                e.preventDefault(); // Prevent the default link behavior
+
+                // Get the encoded address from the clicked link's data attribute
+                const encodedAddress = $(this).data('address');
+
+                // Create the new Google Maps URL
+                const mapUrl = `https://www.google.com/maps/embed/v1/place?q=${encodedAddress}&key=AIzaSyB0lWqbCev1lN_waArnE6S8w5y1N1ichYM`;
+
+                // Update the iframe src
+                $('#mapIframe').attr('src', mapUrl);
+            });
+        });
+    </script>
+</body>
+</html>
